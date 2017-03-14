@@ -28,4 +28,6 @@ class FluffyLog:
     def flush(self):
         self.__flog.update({'data': self.__flog_data})
         post_json_to_server(self.__server_url, self.__flog)
-        print(self.__flog)
+        # print(self.__flog)
+        self.__flog = {'kind': 'Log', 'data': []}
+        self.__flog_data = []
