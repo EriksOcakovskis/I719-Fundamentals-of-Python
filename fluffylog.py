@@ -1,8 +1,9 @@
 from datetime import datetime
-
+from fluffyreq import post_json_to_server
 
 class FluffyLog:
     __log_datetime_format = '%Y-%m-%d %H:%M:%S'
+    __server_url = server_url = 'http://127.0.0.1:9292/logs'
 
     def __init__(self):
         self.__flog = {'kind': 'Log', 'data': []}
@@ -26,5 +27,5 @@ class FluffyLog:
 
     def flush(self):
         self.__flog.update({'data': self.__flog_data})
-        # TODO send log to server instead of printing it
+        post_json_to_server(self.__server_url, self.__flog)
         print(self.__flog)
