@@ -15,9 +15,9 @@ def post_json_to_server(url, data):
         return response
 
 
-def get_host_ip():
+def get_host_ip(inp_ip):
     try:
-        r = requests.get('http://ipv4bot.whatismyipaddress.com/')
+        r = requests.get(inp_ip)
         resp = r.status_code
         ip = r.text
         return ({'ip': ip, 'status code': resp})

