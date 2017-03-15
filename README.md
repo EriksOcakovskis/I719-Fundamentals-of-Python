@@ -15,9 +15,9 @@ Please don't use it!
     {"file_data"=>{"file_data"=>{"data"=>[{"files"=>[{"name"=>"desktop.ini", "stats"=>[33206, 281474976793944, 136187296, 1, 0, 0, 402, 1467218973, 1467218973, 1467218973]}, {"name"=>"fluffypaws.exe", "stats"=>[33279, 1407374883646712, 136187296, 1, 0, 0, 6514135, 1489607864, 1489607864, 1489607864]}], "folder"=>"C:\\Windows\\system32\\config\\systemprofile\\Documents"}], "kind"=>"User path data"}}, "ip"=>"1.1.1.1", "pc_data"=>{"data"=>{"Name"=>"erik-PC", "System"=>"Windows", "Version"=>"6.1.7601", "Machine"=>"x86", "Release"=>"7", "Processor"=>"x86 Family 6 Model 69 Stepping 1, GenuineIntel"}, "kind"=>"PC info"}}
 
 
-# Instalation
+# Installation
 Don't!
-For testing purpuses use Windows virtual machine then clone this repo and run fluffypaws[dot]py in console.
+For testing purposes use Windows virtual machine then clone this repo and run fluffypaws[dot]py in console.
 
 
 To create binary [pyinstaller](https://pyinstaller.readthedocs.io) can be used.
