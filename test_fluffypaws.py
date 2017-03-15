@@ -1,5 +1,4 @@
 import unittest
-import fluffypaws
 import fluffyreq
 import fluffylog
 from unittest.mock import Mock, patch

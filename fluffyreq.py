@@ -1,11 +1,14 @@
 import requests
+import json
 
 
 def post_json_to_server(url, data):
     response = -1
     try:
+        data_json = json.dumps(data)
+        print(data_json)
         s = requests.Session()
-        req = requests.Request('POST', url, data=data)
+        req = requests.Request('POST', url, data=data_json)
         prepped = req.prepare()
         prepped.headers['Content-Type'] = 'application/json'
         response = s.send(prepped).status_code
