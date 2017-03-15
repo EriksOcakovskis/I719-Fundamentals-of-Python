@@ -2,6 +2,7 @@ import requests
 
 
 def post_json_to_server(url, data):
+    response = -1
     try:
         s = requests.Session()
         req = requests.Request('POST', url, data=data)
@@ -9,7 +10,6 @@ def post_json_to_server(url, data):
         prepped.headers['Content-Type'] = 'application/json'
         response = s.send(prepped).status_code
     except Exception as e:
-        response = -1
         raise e
     finally:
         return response
